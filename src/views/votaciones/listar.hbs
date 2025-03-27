@@ -1,0 +1,97 @@
+<div class="row">
+    <div class="col-12 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h2 class="card-title">Listado de Votaciones</h2>
+                    <a href="/votaciones/crear" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Nueva Votación
+                    </a>
+                </div>
+
+                {{#if mensaje}}
+                <div class="alert alert-success mt-3">
+                    {{mensaje}}
+                </div>
+                {{/if}}
+
+                {{#if error}}
+                <div class="alert alert-danger mt-3">
+                    {{error}}
+                </div>
+                {{/if}}
+            </div>
+        </div>
+    </div>
+
+    {{#if votaciones.length}}
+    <div class="col-12">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>Año</th>
+                        <th>Fecha</th>
+                        <th>Horario</th>
+                        <th>Líder del Proceso</th>
+                        <th>Estado</th>
+                        <th>Observaciones</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each votaciones}}
+                    <tr>
+                        <td>{{this.año}}</td>
+                        <td>{{formatDate this.fecha_votacion}}</td>
+                        <td>{{this.hora_apertura}} - {{this.hora_cierre}}</td>
+                        <td>{{this.lider_proceso}}</td>
+                        <td>
+                            <span class="badge {{#if (eq this.estado 'Programada')}}bg-primary{{else if (eq this.estado 'En Curso')}}bg-success{{else}}bg-secondary{{/if}}">
+                                {{this.estado}}
+                            </span>
+                        </td>
+                        <td>
+                            {{#if this.observaciones}}
+                            <span class="text-truncate d-inline-block" style="max-width: 200px;" title="{{this.observaciones}}">
+                                {{this.observaciones}}
+                            </span>
+                            {{else}}
+                            <em class="text-muted">Sin observaciones</em>
+                            {{/if}}
+                        </td>
+                        <td>
+                            <div class="btn-group">
+                                <a href="/votaciones/editar/{{this.id}}" class="btn btn-sm btn-outline-primary">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <button class="btn btn-sm btn-outline-danger" onclick="confirmarEliminar({{this.id}})">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {{else}}
+    <div class="col-12">
+        <div class="alert alert-info">
+            No hay votaciones registradas. <a href="/votaciones/crear" class="alert-link">Crear una nueva votación</a>.
+        </div>
+    </div>
+    {{/if}}
+</div>
+
+<!-- Font Awesome para los iconos -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+<script>
+function confirmarEliminar(id) {
+    if (confirm('¿Estás seguro de que deseas eliminar esta votación?')) {
+        window.location.href = `/votaciones/eliminar/${id}`;
+    }
+}
+</script> 

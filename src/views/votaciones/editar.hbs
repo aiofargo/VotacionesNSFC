@@ -1,0 +1,105 @@
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-body">
+                <h2 class="text-center mb-4">Editar Votación</h2>
+                
+                {{#if error}}
+                <div class="alert alert-danger">
+                    {{error}}
+                </div>
+                {{/if}}
+
+                <form action="/votaciones/editar/{{votacion.id}}" method="POST">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="año" class="form-label">Año</label>
+                            <input type="number" class="form-control" id="año" name="año" 
+                                value="{{votacion.año}}" required min="2024" max="2100">
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="fechaVotacion" class="form-label">Fecha de Votación</label>
+                            <input type="date" class="form-control" id="fechaVotacion" name="fechaVotacion" 
+                                value="{{formatFechaInput votacion.fecha_votacion}}" required>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="horaApertura" class="form-label">Hora de Apertura</label>
+                            <input type="time" class="form-control" id="horaApertura" name="horaApertura" 
+                                value="{{votacion.hora_apertura}}" required>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="horaCierre" class="form-label">Hora de Cierre</label>
+                            <input type="time" class="form-control" id="horaCierre" name="horaCierre" 
+                                value="{{votacion.hora_cierre}}" required>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="liderProceso" class="form-label">Líder del Proceso</label>
+                        <input type="text" class="form-control" id="liderProceso" name="liderProceso" 
+                            value="{{votacion.lider_proceso}}" required>
+                        <div class="form-text">Nombre completo del responsable del proceso de votación.</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="estado" class="form-label">Estado de la Votación</label>
+                        <select class="form-select" id="estado" name="estado" required>
+                            <option value="Programada" {{#if (eq votacion.estado 'Programada')}}selected{{/if}}>
+                                Programada
+                            </option>
+                            <option value="En Curso" {{#if (eq votacion.estado 'En Curso')}}selected{{/if}}>
+                                En Curso
+                            </option>
+                            <option value="Finalizada" {{#if (eq votacion.estado 'Finalizada')}}selected{{/if}}>
+                                Finalizada
+                            </option>
+                            <option value="Cancelada" {{#if (eq votacion.estado 'Cancelada')}}selected{{/if}}>
+                                Cancelada
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="observaciones" class="form-label">Observaciones</label>
+                        <textarea class="form-control" id="observaciones" name="observaciones" 
+                            rows="3">{{votacion.observaciones}}</textarea>
+                        <div class="form-text">Información adicional relevante para el proceso de votación.</div>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            Guardar Cambios
+                        </button>
+                        <a href="/votaciones" class="btn btn-outline-secondary">
+                            Cancelar y Volver
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Establecer fecha mínima como hoy
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('fechaVotacion').min = today;
+
+    // Validar que la hora de cierre sea posterior a la hora de apertura
+    document.querySelector('form').addEventListener('submit', function(e) {
+        const horaApertura = document.getElementById('horaApertura').value;
+        const horaCierre = document.getElementById('horaCierre').value;
+        
+        if (horaCierre <= horaApertura) {
+            e.preventDefault();
+            alert('La hora de cierre debe ser posterior a la hora de apertura');
+        }
+    });
+});
+</script> 

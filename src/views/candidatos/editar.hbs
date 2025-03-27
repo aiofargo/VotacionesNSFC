@@ -1,0 +1,82 @@
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <h2 class="card-title">Editar Candidato a {{tipo}}</h2>
+
+                {{#if error}}
+                <div class="alert alert-danger mt-3">
+                    {{error}}
+                </div>
+                {{/if}}
+
+                <form action="/candidatos/{{tipo}}/editar/{{candidato.id}}" method="POST" enctype="multipart/form-data" onsubmit="return validarArchivo()">
+                    <div class="mb-3">
+                        <label for="nombres" class="form-label">Nombres</label>
+                        <input type="text" class="form-control" id="nombres" name="nombres" value="{{candidato.nombres}}" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="apellidos" class="form-label">Apellidos</label>
+                        <input type="text" class="form-control" id="apellidos" name="apellidos" value="{{candidato.apellidos}}" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="grado" class="form-label">Grado</label>
+                        <select class="form-select" id="grado" name="grado" required>
+                            <option value="6°" {{#if (eq candidato.grado "6°")}}selected{{/if}}>6°</option>
+                            <option value="7°" {{#if (eq candidato.grado "7°")}}selected{{/if}}>7°</option>
+                            <option value="8°" {{#if (eq candidato.grado "8°")}}selected{{/if}}>8°</option>
+                            <option value="9°" {{#if (eq candidato.grado "9°")}}selected{{/if}}>9°</option>
+                            <option value="10°" {{#if (eq candidato.grado "10°")}}selected{{/if}}>10°</option>
+                            <option value="11°" {{#if (eq candidato.grado "11°")}}selected{{/if}}>11°</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="numeroTarjeton" class="form-label">Número de Tarjetón</label>
+                        <input type="number" class="form-control" id="numeroTarjeton" name="numeroTarjeton" 
+                            value="{{candidato.numero_tarjeton}}" min="1" required>
+                        <div class="form-text">Número único que identificará al candidato en el tarjetón electoral.</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="foto" class="form-label">Foto del Candidato</label>
+                        <input type="file" class="form-control" id="foto" name="foto" accept="image/*">
+                        <div class="form-text">Deja este campo vacío si no deseas cambiar la foto actual. Tamaño máximo: 5MB</div>
+                        {{#if candidato.foto_url}}
+                        <div class="mt-2">
+                            <img src="{{candidato.foto_url}}" alt="Foto actual" class="img-thumbnail" style="max-height: 200px">
+                            <p class="form-text">Foto actual</p>
+                        </div>
+                        {{/if}}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="propuestas" class="form-label">Propuestas</label>
+                        <textarea class="form-control" id="propuestas" name="propuestas" rows="4" required>{{candidato.propuestas}}</textarea>
+                    </div>
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="/candidatos/{{tipo}}" class="btn btn-secondary me-md-2">Cancelar</a>
+                        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function validarArchivo() {
+    const archivo = document.getElementById('foto').files[0];
+    if (archivo) {
+        const tamanoMaximo = 5 * 1024 * 1024; // 5MB en bytes
+        if (archivo.size > tamanoMaximo) {
+            alert('El archivo es demasiado grande. El tamaño máximo permitido es 5MB.');
+            return false;
+        }
+    }
+    return true;
+}
+</script> 

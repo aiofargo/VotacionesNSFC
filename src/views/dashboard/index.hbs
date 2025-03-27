@@ -1,0 +1,121 @@
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <h1 class="card-title">Bienvenido al Panel de Control 1</h1>
+                <p class="card-text">Este es tu dashboard personalizado. Aquí podrás gestionar todas las funcionalidades del sistema.</p>
+                
+                {{#if mensaje}}
+                <div class="alert alert-success">
+                    {{mensaje}}
+                </div>
+                {{/if}}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <!-- Sección de Gestión de Candidatos -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="card-title mb-0">Gestión de Candidatos</h5>
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-body text-center">
+                                <i class="fas fa-user-tie fa-2x text-primary mb-2"></i>
+                                <h6>Personero Estudiantil</h6>
+                                <div class="d-grid gap-2">
+                                    <a href="/candidatos/personero" class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-list"></i> Ver Candidatos
+                                    </a>
+                                    <a href="/candidatos/personero/crear" class="btn btn-sm btn-primary">
+                                        <i class="fas fa-plus"></i> Nuevo
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-body text-center">
+                                <i class="fas fa-balance-scale fa-2x text-primary mb-2"></i>
+                                <h6>Contralor Estudiantil</h6>
+                                <div class="d-grid gap-2">
+                                    <a href="/candidatos/contralor" class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-list"></i> Ver Candidatos
+                                    </a>
+                                    <a href="/candidatos/contralor/crear" class="btn btn-sm btn-primary">
+                                        <i class="fas fa-plus"></i> Nuevo
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sección de Gestión de Votaciones -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="card-title mb-0">Gestión de Votaciones</h5>
+            </div>
+            <div class="card-body">
+                <p class="card-text">Administra los procesos de votación del sistema.</p>
+                <div class="d-grid gap-2">
+                    <a href="/votaciones/crear" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Crear Nueva Votación
+                    </a>
+                    <a href="/votaciones" class="btn btn-outline-primary">
+                        <i class="fas fa-list"></i> Ver Votaciones
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="card-title mb-0">Gestión de Administradores</h5>
+            </div>
+            <div class="card-body">
+                <p class="card-text">Administra las cuentas del sistema.</p>
+                <a href="/createAdmin" class="btn btn-primary">
+                    <i class="fas fa-user-plus"></i> Crear Nuevo Administrador
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="card-title mb-0">Gestión de Resultados</h5>
+            </div>
+            <div class="card-body">
+                <p class="card-text">Consulta las estadísticas y resultados de las votaciones.</p>
+                <div class="d-grid gap-2">
+                    <a href="/resultados/estadisticas" class="btn btn-primary mb-2">
+                        <i class="fas fa-chart-pie"></i> Estadísticas de Participación
+                    </a>
+                    <a href="/resultados/ver" class="btn btn-outline-primary">
+                        <i class="fas fa-poll"></i> Ver Resultados
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Font Awesome para los iconos -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> 

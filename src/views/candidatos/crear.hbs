@@ -1,0 +1,91 @@
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-body">
+                <h2 class="text-center mb-4">Registrar Candidato a {{tipo}}</h2>
+                
+                {{#if error}}
+                <div class="alert alert-danger">
+                    {{error}}
+                </div>
+                {{/if}}
+
+                <form action="/candidatos/{{tipo}}/crear" method="POST" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="nombres" class="form-label">Nombres</label>
+                            <input type="text" class="form-control" id="nombres" name="nombres" 
+                                value="{{datos.nombres}}" required>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="apellidos" class="form-label">Apellidos</label>
+                            <input type="text" class="form-control" id="apellidos" name="apellidos" 
+                                value="{{datos.apellidos}}" required>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="grado" class="form-label">Grado</label>
+                            <select class="form-select" id="grado" name="grado" required>
+                                <option value="">Seleccione un grado</option>
+                                <option value="6°" {{#if (eq datos.grado '6°')}}selected{{/if}}>6°</option>
+                                <option value="7°" {{#if (eq datos.grado '7°')}}selected{{/if}}>7°</option>
+                                <option value="8°" {{#if (eq datos.grado '8°')}}selected{{/if}}>8°</option>
+                                <option value="9°" {{#if (eq datos.grado '9°')}}selected{{/if}}>9°</option>
+                                <option value="10°" {{#if (eq datos.grado '10°')}}selected{{/if}}>10°</option>
+                                <option value="11°" {{#if (eq datos.grado '11°')}}selected{{/if}}>11°</option>
+                            </select>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="numeroTarjeton" class="form-label">Número de Tarjetón</label>
+                            <input type="number" class="form-control" id="numeroTarjeton" name="numeroTarjeton" 
+                                value="{{datos.numeroTarjeton}}" required min="1">
+                            <div class="form-text">Número único que identificará al candidato en el tarjetón.</div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="foto" class="form-label">Fotografía</label>
+                        <input type="file" class="form-control" id="foto" name="foto" accept="image/*" required>
+                        <div class="form-text">
+                            Sube una fotografía del candidato. Tamaño máximo: 5MB. 
+                            Formatos permitidos: JPG, PNG, GIF.
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="propuestas" class="form-label">Propuestas</label>
+                        <textarea class="form-control" id="propuestas" name="propuestas" 
+                            rows="5" required>{{datos.propuestas}}</textarea>
+                        <div class="form-text">
+                            Describe las principales propuestas y compromisos del candidato.
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            Registrar Candidato
+                        </button>
+                        <a href="/candidatos/{{tipo}}" class="btn btn-outline-secondary">
+                            Cancelar y Volver
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('foto').addEventListener('change', function(e) {
+    // Validar tamaño del archivo
+    const maxSize = 5 * 1024 * 1024; // 5MB
+    if (this.files[0].size > maxSize) {
+        alert('El archivo es demasiado grande. El tamaño máximo permitido es 5MB.');
+        this.value = '';
+    }
+});
+</script> 

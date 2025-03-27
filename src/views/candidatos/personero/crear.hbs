@@ -1,0 +1,143 @@
+<div class="container py-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="card-title h5 mb-0">
+                        <i class="fas fa-user-tie"></i> Registrar Nuevo Candidato a Personero
+                    </h2>
+                </div>
+                <div class="card-body">
+                    {{#if error}}
+                    <div class="alert alert-danger">
+                        {{error}}
+                    </div>
+                    {{/if}}
+
+                    <form action="/candidatos/personero/crear" method="POST" enctype="multipart/form-data" onsubmit="return validarFormulario()">
+                        <!-- Información Personal -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h5 class="border-bottom pb-2">Información Personal</h5>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="nombres" class="form-label">Nombres *</label>
+                                    <input type="text" class="form-control" id="nombres" name="nombres" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="apellidos" class="form-label">Apellidos *</label>
+                                    <input type="text" class="form-control" id="apellidos" name="apellidos" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Información Académica -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h5 class="border-bottom pb-2">Información Académica</h5>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="grado" class="form-label">Grado *</label>
+                                    <select class="form-select" id="grado" name="grado" required>
+                                        <option value="">Seleccione un grado</option>
+                                        <option value="11°">11°</option>
+                                        <option value="10°">10°</option>
+                                        <option value="9°">9°</option>
+                                        <option value="8°">8°</option>
+                                        <option value="7°">7°</option>
+                                        <option value="6°">6°</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="numeroTarjeton" class="form-label">Número de Tarjetón *</label>
+                                    <input type="number" class="form-control" id="numeroTarjeton" name="numeroTarjeton" min="1" required>
+                                    <div class="form-text">Número único que identificará al candidato en el tarjetón electoral.</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Propuesta y Foto -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h5 class="border-bottom pb-2">Propuesta y Foto</h5>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="propuestas" class="form-label">Propuestas *</label>
+                                    <textarea class="form-control" id="propuestas" name="propuestas" rows="5" required></textarea>
+                                    <div class="form-text">Describe las principales propuestas del candidato.</div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="foto" class="form-label">Foto del Candidato *</label>
+                                    <input type="file" class="form-control" id="foto" name="foto" accept="image/*" required>
+                                    <div class="form-text">Formato: JPG, PNG. Tamaño máximo: 5MB</div>
+                                </div>
+                                <div id="previewContainer" class="mt-3 text-center d-none">
+                                    <img id="preview" src="#" alt="Vista previa" class="img-thumbnail" style="max-height: 200px">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="d-flex justify-content-end gap-2">
+                                    <a href="/candidatos/personero" class="btn btn-secondary">
+                                        <i class="fas fa-times"></i> Cancelar
+                                    </a>
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-save"></i> Guardar Candidato
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+<script>
+// Validación del formulario
+function validarFormulario() {
+    const foto = document.getElementById('foto').files[0];
+    if (foto) {
+        const tamanoMaximo = 5 * 1024 * 1024; // 5MB en bytes
+        if (foto.size > tamanoMaximo) {
+            alert('La foto es demasiado grande. El tamaño máximo permitido es 5MB.');
+            return false;
+        }
+    }
+    return true;
+}
+
+// Vista previa de la foto
+document.getElementById('foto').addEventListener('change', function(e) {
+    const preview = document.getElementById('preview');
+    const previewContainer = document.getElementById('previewContainer');
+    const file = e.target.files[0];
+
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            preview.src = e.target.result;
+            previewContainer.classList.remove('d-none');
+        }
+        reader.readAsDataURL(file);
+    } else {
+        preview.src = '#';
+        previewContainer.classList.add('d-none');
+    }
+});
+</script> 

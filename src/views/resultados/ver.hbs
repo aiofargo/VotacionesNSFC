@@ -1,0 +1,275 @@
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0"><i class="fas fa-poll me-2"></i>Resultados de las Votaciones</h4>
+                </div>
+                <div class="card-body">
+                    {{#if error}}
+                    <div class="alert alert-danger">
+                        {{error}}
+                    </div>
+                    {{/if}}
+
+                    <!-- Resultados Personero -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header bg-success text-white">
+                                    <h5 class="mb-0">Resultados Personero Estudiantil</h5>
+                                </div>
+                                <div class="card-body">
+                                    <!-- Ganador Personero -->
+                                    {{#with (lookup resultadosPersonero 0)}}
+                                    <div class="alert alert-success mb-4">
+                                        <h5 class="alert-heading"><i class="fas fa-crown me-2"></i>Ganador Personero</h5>
+                                        <div class="row align-items-center">
+                                            <div class="col-md-2">
+                                                <img src="/uploads/candidatos/{{foto_url}}" alt="Foto {{nombres}}" class="img-fluid rounded-circle" style="width: 100px; height: 100px; object-fit: cover;">
+                                            </div>
+                                            <div class="col-md-10">
+                                                <h4>{{nombres}} {{apellidos}}</h4>
+                                                <p class="mb-0">Grado: {{grado}} | Tarjetón: {{numero_tarjeton}} | Votos: {{total_votos}} ({{porcentaje}}%)</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {{/with}}
+
+                                    <!-- Gráfica de Resultados Personero -->
+                                    <div class="mb-4">
+                                        <canvas id="graficaPersonero"></canvas>
+                                    </div>
+
+                                    <!-- Tabla de Resultados Personero -->
+                                    <div class="table-responsive">
+                                        <table class="table table-hover">
+                                            <thead class="table-primary">
+                                                <tr>
+                                                    <th>Posición</th>
+                                                    <th>Foto</th>
+                                                    <th>Nombres</th>
+                                                    <th>Grado</th>
+                                                    <th>Tarjetón</th>
+                                                    <th>Votos</th>
+                                                    <th>Porcentaje</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {{#each resultadosPersonero}}
+                                                <tr>
+                                                    <td>{{add @index 1}}°</td>
+                                                    <td>
+                                                        <img src="/uploads/candidatos/{{foto_url}}" alt="Foto {{nombres}}" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover;">
+                                                    </td>
+                                                    <td>{{nombres}} {{apellidos}}</td>
+                                                    <td>{{grado}}</td>
+                                                    <td>{{numero_tarjeton}}</td>
+                                                    <td>{{total_votos}}</td>
+                                                    <td>
+                                                        <div class="progress" style="height: 20px;">
+                                                            <div class="progress-bar bg-success" 
+                                                                 role="progressbar" 
+                                                                 style="width: {{porcentaje}}%"
+                                                                 aria-valuenow="{{porcentaje}}" 
+                                                                 aria-valuemin="0" 
+                                                                 aria-valuemax="100">
+                                                                {{porcentaje}}%
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                {{/each}}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Resultados Contralor -->
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header bg-info text-white">
+                                    <h5 class="mb-0">Resultados Contralor Estudiantil</h5>
+                                </div>
+                                <div class="card-body">
+                                    <!-- Ganador Contralor -->
+                                    {{#with (lookup resultadosContralor 0)}}
+                                    <div class="alert alert-info mb-4">
+                                        <h5 class="alert-heading"><i class="fas fa-crown me-2"></i>Ganador Contralor</h5>
+                                        <div class="row align-items-center">
+                                            <div class="col-md-2">
+                                                <img src="/uploads/candidatos/{{foto_url}}" alt="Foto {{nombres}}" class="img-fluid rounded-circle" style="width: 100px; height: 100px; object-fit: cover;">
+                                            </div>
+                                            <div class="col-md-10">
+                                                <h4>{{nombres}} {{apellidos}}</h4>
+                                                <p class="mb-0">Grado: {{grado}} | Tarjetón: {{numero_tarjeton}} | Votos: {{total_votos}} ({{porcentaje}}%)</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {{/with}}
+
+                                    <!-- Gráfica de Resultados Contralor -->
+                                    <div class="mb-4">
+                                        <canvas id="graficaContralor"></canvas>
+                                    </div>
+
+                                    <!-- Tabla de Resultados Contralor -->
+                                    <div class="table-responsive">
+                                        <table class="table table-hover">
+                                            <thead class="table-info">
+                                                <tr>
+                                                    <th>Posición</th>
+                                                    <th>Foto</th>
+                                                    <th>Nombres</th>
+                                                    <th>Grado</th>
+                                                    <th>Tarjetón</th>
+                                                    <th>Votos</th>
+                                                    <th>Porcentaje</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {{#each resultadosContralor}}
+                                                <tr>
+                                                    <td>{{add @index 1}}°</td>
+                                                    <td>
+                                                        <img src="/uploads/candidatos/{{foto_url}}" alt="Foto {{nombres}}" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover;">
+                                                    </td>
+                                                    <td>{{nombres}} {{apellidos}}</td>
+                                                    <td>{{grado}}</td>
+                                                    <td>{{numero_tarjeton}}</td>
+                                                    <td>{{total_votos}}</td>
+                                                    <td>
+                                                        <div class="progress" style="height: 20px;">
+                                                            <div class="progress-bar bg-info" 
+                                                                 role="progressbar" 
+                                                                 style="width: {{porcentaje}}%"
+                                                                 aria-valuenow="{{porcentaje}}" 
+                                                                 aria-valuemin="0" 
+                                                                 aria-valuemax="100">
+                                                                {{porcentaje}}%
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                {{/each}}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Scripts necesarios -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Datos para la gráfica de Personero
+    const datosPersonero = {
+        labels: {{#each resultadosPersonero}}'{{nombres}} {{apellidos}}'{{#unless @last}},{{/unless}}{{/each}},
+        datos: {{#each resultadosPersonero}}{{total_votos}}{{#unless @last}},{{/unless}}{{/each}}
+    };
+
+    // Datos para la gráfica de Contralor
+    const datosContralor = {
+        labels: {{#each resultadosContralor}}'{{nombres}} {{apellidos}}'{{#unless @last}},{{/unless}}{{/each}},
+        datos: {{#each resultadosContralor}}{{total_votos}}{{#unless @last}},{{/unless}}{{/each}}
+    };
+
+    // Crear gráfica de Personero
+    new Chart(document.getElementById('graficaPersonero'), {
+        type: 'bar',
+        data: {
+            labels: datosPersonero.labels,
+            datasets: [{
+                label: 'Votos Personero',
+                data: datosPersonero.datos,
+                backgroundColor: 'rgba(40, 167, 69, 0.7)',
+                borderColor: 'rgba(40, 167, 69, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Resultados Personero Estudiantil'
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 1
+                    }
+                }
+            }
+        }
+    });
+
+    // Crear gráfica de Contralor
+    new Chart(document.getElementById('graficaContralor'), {
+        type: 'bar',
+        data: {
+            labels: datosContralor.labels,
+            datasets: [{
+                label: 'Votos Contralor',
+                data: datosContralor.datos,
+                backgroundColor: 'rgba(23, 162, 184, 0.7)',
+                borderColor: 'rgba(23, 162, 184, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Resultados Contralor Estudiantil'
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 1
+                    }
+                }
+            }
+        }
+    });
+});
+</script>
+
+<style>
+.progress {
+    background-color: #e9ecef;
+    border-radius: 0.25rem;
+}
+.card {
+    margin-bottom: 1rem;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+.table-responsive {
+    margin-bottom: 0;
+}
+.alert-success, .alert-info {
+    border-left: 5px solid;
+}
+.alert-success {
+    border-left-color: #28a745;
+}
+.alert-info {
+    border-left-color: #17a2b8;
+}
+</style> 

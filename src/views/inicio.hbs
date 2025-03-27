@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Votación Estudiantil</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- Estilos personalizados -->
+    <style>
+        body {
+            background: #f8f9fa;
+        }
+
+        .split-layout {
+            min-height: 100vh;
+        }
+
+        .left-section {
+            padding: 2rem;
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            border-right: 1px solid rgba(0,0,0,0.1);
+            height: 100%;
+        }
+
+        .right-section {
+            padding: 2rem;
+            background: #ffffff;
+        }
+
+        .main-card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease;
+            background: white;
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            border-bottom: none;
+            padding: 1.5rem;
+        }
+
+        .welcome-text {
+            color: #28a745;
+            font-weight: 600;
+            font-size: 1.5rem;
+        }
+
+        .custom-input {
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+            padding: 12px;
+            transition: all 0.3s ease;
+            height: auto;
+        }
+
+        .custom-input:focus {
+            border-color: #28a745;
+            box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+        }
+
+        .custom-button {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            border: none;
+            border-radius: 10px;
+            padding: 12px 30px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            color: white;
+        }
+
+        .custom-button:hover {
+            background: linear-gradient(135deg, #218838 0%, #1ba87e 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+            color: white;
+        }
+
+        .stats-card {
+            border: none;
+            border-radius: 15px;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .stats-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .progress {
+            height: 10px;
+            border-radius: 5px;
+            margin-top: 0.5rem;
+            background-color: #e9ecef;
+        }
+
+        .stats-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #28a745;
+        }
+
+        .school-logo {
+            max-width: 240px;
+            margin-bottom: 2rem;
+        }
+
+        .alert {
+            border-radius: 10px;
+            border: none;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .table {
+            margin-bottom: 0;
+        }
+
+        .table th {
+            font-weight: 600;
+            background-color: #f8f9fa;
+        }
+
+        @media (max-width: 768px) {
+            .right-section {
+                border-left: none;
+                border-top: 1px solid rgba(0,0,0,0.1);
+                margin-top: 2rem;
+            }
+
+            .stats-card {
+                margin-bottom: 1rem;
+            }
+
+            .welcome-text {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="split-layout">
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sección Izquierda - Formulario de Ingreso -->
+            <div class="col-md-6 left-section">
+                <div class="text-center mb-4">
+                    <img src="https://www.normalfarallonescali.edu.co/wp-content/uploads/2020/10/cropped-cropped-normal-2.png" alt="Logo Escuela Normal Superior Farallones de Cali" class="school-logo">
+                    <h2 class="welcome-text">Proceso de Elecciones Estudiantiles {{currentYear}}</h2>
+                    <p class="text-muted">Escuela Normal Superior Farallones de Cali</p>
+                </div>
+
+                <div class="card main-card">
+                    <div class="card-header text-white">
+                        <h4 class="mb-0"><i class="fas fa-vote-yea me-2"></i>Ingreso al Sistema de Votación</h4>
+                    </div>
+                    <div class="card-body p-4">
+                        {{#if error}}
+                        <div class="alert alert-danger">
+                            <i class="fas fa-exclamation-circle me-2"></i>{{error}}
+                        </div>
+                        {{/if}}
+
+                        {{#if yaVoto}}
+                        <div class="alert alert-warning">
+                            <i class="fas fa-info-circle me-2"></i>Ya has ejercido tu derecho al voto.
+                        </div>
+                        {{/if}}
+
+                        <form action="/votar/validar" method="POST" class="needs-validation" novalidate>
+                            <div class="form-floating mb-4">
+                                <input type="text" class="form-control custom-input" id="documento" name="documento" 
+                                       placeholder="Número de Documento" required pattern="[0-9]+" 
+                                       minlength="8" maxlength="10">
+                                <label for="documento">Número de Documento</label>
+                                <div class="invalid-feedback">
+                                    Por favor ingresa un número de documento válido (8-10 dígitos)
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-lg custom-button w-100">
+                                <i class="fas fa-sign-in-alt me-2"></i>Ingresar a Votar
+                            </button>
+                        </form>
+
+                        <div class="mt-4 text-center">
+                            <a href="/login" class="btn btn-outline-secondary">
+                                <i class="fas fa-user-lock me-2"></i>Acceso Administrativo
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sección Derecha - Estadísticas -->
+            <div class="col-md-6 right-section">
+                <h3 class="text-center mb-4">
+                    <i class="fas fa-chart-pie me-2"></i>
+                    Estadísticas de Participación
+                </h3>
+
+                <div class="row g-3">
+                    <!-- Tarjetas de Estadísticas -->
+                    <div class="col-md-4">
+                        <div class="card stats-card bg-light">
+                            <div class="card-body text-center">
+                                <i class="fas fa-users stats-icon"></i>
+                                <h5>Total Estudiantes</h5>
+                                <h3 class="mb-0">{{estadisticas.total_votantes}}</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card stats-card bg-light">
+                            <div class="card-body text-center">
+                                <i class="fas fa-vote-yea stats-icon"></i>
+                                <h5>Han Votado</h5>
+                                <h3 class="mb-0">{{estadisticas.votos_registrados}}</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card stats-card bg-light">
+                            <div class="card-body text-center">
+                                <i class="fas fa-percentage stats-icon"></i>
+                                <h5>Participación</h5>
+                                <h3 class="mb-0">{{estadisticas.porcentaje_participacion}}%</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Progreso General -->
+                <div class="card stats-card mt-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Progreso de Votación</h5>
+                        <div class="progress">
+                            <div class="progress-bar bg-success progress-bar-striped progress-bar-animated" 
+                                 role="progressbar" 
+                                 style="width: {{estadisticas.porcentaje_participacion}}%"
+                                 aria-valuenow="{{estadisticas.porcentaje_participacion}}" 
+                                 aria-valuemin="0" 
+                                 aria-valuemax="100">
+                                {{estadisticas.porcentaje_participacion}}%
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tabla de Participación por Grados -->
+                <div class="card stats-card mt-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Participación por Grados</h5>
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Grado</th>
+                                        <th>Total</th>
+                                        <th>Han Votado</th>
+                                        <th>Progreso</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {{#each estadisticas.por_grado}}
+                                    <tr>
+                                        <td>{{grado}}</td>
+                                        <td>{{total}}</td>
+                                        <td>{{votaron}}</td>
+                                        <td style="width: 40%;">
+                                            <div class="progress">
+                                                <div class="progress-bar bg-success" 
+                                                     role="progressbar" 
+                                                     style="width: {{porcentaje}}%"
+                                                     aria-valuenow="{{porcentaje}}" 
+                                                     aria-valuemin="0" 
+                                                     aria-valuemax="100">
+                                                    {{porcentaje}}%
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {{/each}}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap Bundle con Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Validación del formulario
+    const forms = document.querySelectorAll('.needs-validation');
+    Array.from(forms).forEach(form => {
+        form.addEventListener('submit', event => {
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            form.classList.add('was-validated');
+        });
+    });
+
+    // Permitir solo números en el campo de documento
+    const documentoInput = document.getElementById('documento');
+    documentoInput.addEventListener('input', function(e) {
+        this.value = this.value.replace(/[^0-9]/g, '');
+    });
+});
+</script>
+</body>
+</html> 

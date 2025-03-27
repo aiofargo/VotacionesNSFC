@@ -1,0 +1,138 @@
+<div class="container py-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title">Bienvenido(a), {{votante.nombres}} {{votante.apellidos}}</h2>
+                    <p class="card-text">
+                        <strong>Grado:</strong> {{votante.grado}} |
+                        <strong>Documento:</strong> {{votante.documento}}
+                    </p>
+                    {{#if error}}
+                    <div class="alert alert-danger">
+                        <i class="fas fa-exclamation-circle"></i> {{error}}
+                    </div>
+                    {{/if}}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <form action="/votar/procesar" method="POST" id="formVotacion">
+        <!-- Tarjetón Personero -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h3 class="card-title h5 mb-0">Tarjetón para Personero Estudiantil</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                            {{#each personeros}}
+                            <div class="col">
+                                <div class="card h-100">
+                                    <img src="{{this.foto_url}}" class="card-img-top" alt="Foto de {{this.nombres}}"
+                                        style="height: 200px; object-fit: cover;">
+                                    <div class="card-body">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="personeroId"
+                                                id="personero{{this.id}}" value="{{this.id}}" required>
+                                            <label class="form-check-label" for="personero{{this.id}}">
+                                                <h5 class="card-title mb-1">Tarjetón #{{this.numero_tarjeton}}</h5>
+                                                <p class="card-text mb-1">{{this.nombres}} {{this.apellidos}}</p>
+                                                <small class="text-muted">Grado: {{this.grado}}</small>
+                                            </label>
+                                        </div>
+                                        <div class="mt-3">
+                                            <strong>Propuestas:</strong>
+                                            <p class="card-text">{{this.propuestas}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {{/each}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tarjetón Contralor -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h3 class="card-title h5 mb-0">Tarjetón para Contralor Estudiantil</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                            {{#each contralores}}
+                            <div class="col">
+                                <div class="card h-100">
+                                    <img src="{{this.foto_url}}" class="card-img-top" alt="Foto de {{this.nombres}}"
+                                        style="height: 200px; object-fit: cover;">
+                                    <div class="card-body">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="contralorId"
+                                                id="contralor{{this.id}}" value="{{this.id}}" required>
+                                            <label class="form-check-label" for="contralor{{this.id}}">
+                                                <h5 class="card-title mb-1">Tarjetón #{{this.numero_tarjeton}}</h5>
+                                                <p class="card-text mb-1">{{this.nombres}} {{this.apellidos}}</p>
+                                                <small class="text-muted">Grado: {{this.grado}}</small>
+                                            </label>
+                                        </div>
+                                        <div class="mt-3">
+                                            <strong>Propuestas:</strong>
+                                            <p class="card-text">{{this.propuestas}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {{/each}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Botones de acción -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <button type="button" class="btn btn-secondary" onclick="history.back()">
+                                <i class="fas fa-arrow-left"></i> Volver
+                            </button>
+                            <button type="submit" class="btn btn-primary btn-lg" onclick="return confirmarVoto()">
+                                <i class="fas fa-vote-yea"></i> Confirmar Voto
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- Bootstrap CSS y JS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+<script>
+function confirmarVoto() {
+    // Verificar que se haya seleccionado un candidato para cada cargo
+    const personeroSeleccionado = document.querySelector('input[name="personeroId"]:checked');
+    const contralorSeleccionado = document.querySelector('input[name="contralorId"]:checked');
+
+    if (!personeroSeleccionado || !contralorSeleccionado) {
+        alert('Debes seleccionar un candidato para cada cargo');
+        return false;
+    }
+
+    return confirm('¿Estás seguro de tu elección? Una vez confirmado el voto, no podrás cambiarlo.');
+}
+</script> 

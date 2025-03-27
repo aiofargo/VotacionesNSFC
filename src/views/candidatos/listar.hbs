@@ -1,0 +1,75 @@
+<div class="row">
+    <div class="col-12 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h2 class="card-title">Candidatos a {{tipo}}</h2>
+                    <a href="/candidatos/{{tipo}}/crear" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Nuevo Candidato
+                    </a>
+                </div>
+
+                {{#if mensaje}}
+                <div class="alert alert-success mt-3">
+                    {{mensaje}}
+                </div>
+                {{/if}}
+
+                {{#if error}}
+                <div class="alert alert-danger mt-3">
+                    {{error}}
+                </div>
+                {{/if}}
+            </div>
+        </div>
+    </div>
+
+    {{#if candidatos.length}}
+    {{#each candidatos}}
+    <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card h-100">
+            <img src="{{this.foto_url}}" class="card-img-top" alt="Foto de {{this.nombres}}"
+                style="height: 300px; object-fit: cover;">
+            <div class="card-body">
+                <h5 class="card-title">
+                    Tarjetón #{{this.numero_tarjeton}} - {{this.nombres}} {{this.apellidos}}
+                </h5>
+                <p class="card-text">
+                    <strong>Grado:</strong> {{this.grado}}
+                </p>
+                <div class="card-text mb-3">
+                    <strong>Propuestas:</strong>
+                    <p class="text-muted">{{this.propuestas}}</p>
+                </div>
+                <div class="d-grid gap-2">
+                    <a href="/candidatos/{{../tipo}}/editar/{{this.id}}" class="btn btn-outline-primary">
+                        <i class="fas fa-edit"></i> Editar
+                    </a>
+                    <button class="btn btn-outline-danger" onclick="confirmarEliminar('{{../tipo}}', {{this.id}})">
+                        <i class="fas fa-trash"></i> Eliminar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{/each}}
+    {{else}}
+    <div class="col-12">
+        <div class="alert alert-info">
+            No hay candidatos registrados. 
+            <a href="/candidatos/{{tipo}}/crear" class="alert-link">Registrar nuevo candidato</a>.
+        </div>
+    </div>
+    {{/if}}
+</div>
+
+<!-- Font Awesome para los iconos -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+<script>
+function confirmarEliminar(tipo, id) {
+    if (confirm('¿Estás seguro de que deseas eliminar este candidato?')) {
+        window.location.href = `/candidatos/${tipo}/eliminar/${id}`;
+    }
+}
+</script> 

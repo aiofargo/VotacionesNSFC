@@ -1,0 +1,43 @@
+<div class="row justify-content-center">
+    <div class="col-md-6 col-lg-4">
+        <div class="card shadow">
+            <div class="card-body">
+                <h2 class="text-center mb-4">Registro de Administrador</h2>
+                
+                {{#if error}}
+                <div class="alert alert-danger">
+                    {{error}}
+                </div>
+                {{/if}}
+
+                <form action="/registro" method="POST">
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Correo Electrónico</label>
+                        <input type="email" class="form-control" id="email" name="email" required>
+                        <div class="form-text">Este será tu correo para iniciar sesión.</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Contraseña</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                        <div class="form-text">La contraseña debe tener al menos 8 caracteres.</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="confirmPassword" class="form-label">Confirmar Contraseña</label>
+                        <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            Registrarse
+                        </button>
+                        <a href="/login" class="btn btn-outline-secondary">
+                            Volver al Login
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div> 
