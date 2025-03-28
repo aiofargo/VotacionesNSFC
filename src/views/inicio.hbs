@@ -12,22 +12,16 @@
     <style>
         body {
             background: #f8f9fa;
-        }
-
-        .split-layout {
             min-height: 100vh;
+            display: flex;
+            align-items: center;
         }
 
-        .left-section {
+        .main-container {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
             padding: 2rem;
-            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
-            border-right: 1px solid rgba(0,0,0,0.1);
-            height: 100%;
-        }
-
-        .right-section {
-            padding: 2rem;
-            background: #ffffff;
         }
 
         .main-card {
@@ -35,7 +29,6 @@
             border-radius: 15px;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
             overflow: hidden;
-            transition: transform 0.3s ease;
             background: white;
         }
 
@@ -49,6 +42,12 @@
             color: #28a745;
             font-weight: 600;
             font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .school-logo {
+            max-width: 240px;
+            margin-bottom: 2rem;
         }
 
         .custom-input {
@@ -56,7 +55,6 @@
             border: 2px solid #e9ecef;
             padding: 12px;
             transition: all 0.3s ease;
-            height: auto;
         }
 
         .custom-input:focus {
@@ -80,37 +78,6 @@
             background: linear-gradient(135deg, #218838 0%, #1ba87e 100%);
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
-            color: white;
-        }
-
-        .stats-card {
-            border: none;
-            border-radius: 15px;
-            margin-bottom: 1rem;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .stats-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .progress {
-            height: 10px;
-            border-radius: 5px;
-            margin-top: 0.5rem;
-            background-color: #e9ecef;
-        }
-
-        .stats-icon {
-            font-size: 2rem;
-            margin-bottom: 1rem;
-            color: #28a745;
-        }
-
-        .school-logo {
-            max-width: 240px;
-            margin-bottom: 2rem;
         }
 
         .alert {
@@ -118,42 +85,17 @@
             border: none;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
-
-        .table {
-            margin-bottom: 0;
-        }
-
-        .table th {
-            font-weight: 600;
-            background-color: #f8f9fa;
-        }
-
-        @media (max-width: 768px) {
-            .right-section {
-                border-left: none;
-                border-top: 1px solid rgba(0,0,0,0.1);
-                margin-top: 2rem;
-            }
-
-            .stats-card {
-                margin-bottom: 1rem;
-            }
-
-            .welcome-text {
-                font-size: 1.2rem;
-            }
-        }
     </style>
 </head>
 <body>
-
-<div class="split-layout">
     <div class="container-fluid">
-        <div class="row">
-            <!-- Sección Izquierda - Formulario de Ingreso -->
-            <div class="col-md-6 left-section">
+        <div class="row g-4">
+            <!-- Columna Izquierda - Formulario -->
+            <div class="col-md-6">
                 <div class="text-center mb-4">
-                    <img src="https://www.normalfarallonescali.edu.co/wp-content/uploads/2020/10/cropped-cropped-normal-2.png" alt="Logo Escuela Normal Superior Farallones de Cali" class="school-logo">
+                    <img src="https://www.normalfarallonescali.edu.co/wp-content/uploads/2020/10/cropped-cropped-normal-2.png" 
+                         alt="Logo Escuela Normal Superior Farallones de Cali" 
+                         class="school-logo">
                     <h2 class="welcome-text">Proceso de Elecciones Estudiantiles {{currentYear}}</h2>
                     <p class="text-muted">Escuela Normal Superior Farallones de Cali</p>
                 </div>
@@ -175,20 +117,71 @@
                         </div>
                         {{/if}}
 
-                        <form action="/votar/validar" method="POST" class="needs-validation" novalidate>
-                            <div class="form-floating mb-4">
-                                <input type="text" class="form-control custom-input" id="documento" name="documento" 
-                                       placeholder="Número de Documento" required pattern="[0-9]+" 
-                                       minlength="8" maxlength="10">
-                                <label for="documento">Número de Documento</label>
-                                <div class="invalid-feedback">
-                                    Por favor ingresa un número de documento válido (8-10 dígitos)
+                        {{#if votacionActiva}}
+                            <form action="/votar/validar" method="POST" class="needs-validation" novalidate>
+                                <div class="form-floating mb-4">
+                                    <input type="text" class="form-control custom-input" id="documento" name="documento" 
+                                           placeholder="Número de Documento" required pattern="[0-9]+" 
+                                           minlength="8" maxlength="10">
+                                    <label for="documento">Número de Documento</label>
+                                    <div class="invalid-feedback">
+                                        Por favor ingresa un número de documento válido (8-10 dígitos)
+                                    </div>
                                 </div>
+                                <button type="submit" class="btn btn-lg custom-button w-100">
+                                    <i class="fas fa-sign-in-alt me-2"></i>Ingresar a Votar
+                                </button>
+                            </form>
+
+                            {{#if debug}}
+                            <div  style="display: none;" opacity="0" visivility="hidden">
+                                <h6>Información de depuración ejemplo:</h6>
+                                <p>Fecha actual: {{debug.fecha}}</p>
+                                <p>Hora actual: {{debug.hora}}</p>
+                                <p>Estado votación: Activa</p>
+                                {{#if debug.votaciones}}
+                                    {{#each debug.votaciones}}
+                                    <div>
+                                        <p>ID: {{id}}</p>
+                                        <p>Fecha: {{fecha_votacion}}</p>
+                                        <p>Apertura: {{hora_apertura}}</p>
+                                        <p>Cierre: {{hora_cierre}}</p>
+                                        <p>Estado: {{estado}}</p>
+                                    </div>
+                                    {{/each}}
+                                {{/if}}
                             </div>
-                            <button type="submit" class="btn btn-lg custom-button w-100">
-                                <i class="fas fa-sign-in-alt me-2"></i>Ingresar a Votar
-                            </button>
-                        </form>
+                            {{/if}}
+                        {{else}}
+                            <div class="alert alert-info text-center">
+                                <i class="fas fa-clock me-2"></i>
+                                <h5 class="mb-2">Votación no disponible</h5>
+                                <p class="mb-0">El proceso de votación no está activo en este momento.</p>
+                                <p class="mb-0">la votacion se realiza el dia 28 desde las 7 am hasta las 5 pm.</p>
+                            </div>
+
+                            {{#if debug}}
+                            <div style="display: none;" opacity="0" visivility="hidden">
+                                <h6>Información de depuración:</h6>
+                                <p>Fecha actual: {{debug.fecha}}</p>
+                                <p>Hora actual: {{debug.hora}}</p>
+                                <p>Estado votación: Inactiva</p>
+                                {{#if debug.votaciones}}
+                                    {{#each debug.votaciones}}
+                                    <div>
+                                        <p>ID: {{id}}</p>
+                                        <p>Fecha: {{fecha_votacion}}</p>
+                                        <p>Apertura: {{hora_apertura}}</p>
+                                        <p>Cierre: {{hora_cierre}}</p>
+                                        <p>Estado: {{estado}}</p>
+                                    </div>
+                                    {{/each}}
+                                {{else}}
+                                    <p>No se encontraron votaciones en curso</p>
+                                {{/if}}
+                            </div>
+                            {{/if}}
+                        {{/if}}
 
                         <div class="mt-4 text-center">
                             <a href="/login" class="btn btn-outline-secondary">
@@ -199,128 +192,129 @@
                 </div>
             </div>
 
-            <!-- Sección Derecha - Estadísticas -->
-            <div class="col-md-6 right-section">
-                <h3 class="text-center mb-4">
-                    <i class="fas fa-chart-pie me-2"></i>
-                    Estadísticas de Participación
-                </h3>
+            <!-- Columna Derecha - Estadísticas -->
+            <div class="col-md-6">
+                <div class="card main-card">
+                    <div class="card-header">
+                        <h4 class="mb-0"><i class="fas fa-chart-pie me-2"></i>Estadísticas de Participación</h4>
+                    </div>
+                    <div class="card-body p-4">
+                        <!-- Tarjetas de Resumen -->
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-4">
+                                <div class="card bg-light stats-card">
+                                    <div class="card-body text-center">
+                                        <i class="fas fa-users fa-2x text-success mb-2"></i>
+                                        <h5>Total Estudiantes</h5>
+                                        <h3 class="mb-0">{{estadisticas.total_votantes}}</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card bg-light stats-card">
+                                    <div class="card-body text-center">
+                                        <i class="fas fa-vote-yea fa-2x text-success mb-2"></i>
+                                        <h5>Han Votado</h5>
+                                        <h3 class="mb-0">{{estadisticas.votos_registrados}}</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card bg-light stats-card">
+                                    <div class="card-body text-center">
+                                        <i class="fas fa-percentage fa-2x text-success mb-2"></i>
+                                        <h5>Participación</h5>
+                                        <h3 class="mb-0">{{estadisticas.porcentaje_participacion}}%</h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-                <div class="row g-3">
-                    <!-- Tarjetas de Estadísticas -->
-                    <div class="col-md-4">
-                        <div class="card stats-card bg-light">
-                            <div class="card-body text-center">
-                                <i class="fas fa-users stats-icon"></i>
-                                <h5>Total Estudiantes</h5>
-                                <h3 class="mb-0">{{estadisticas.total_votantes}}</h3>
+                        <!-- Barra de Progreso General -->
+                        <div class="card bg-light mb-4">
+                            <div class="card-body">
+                                <h5 class="card-title">Progreso General</h5>
+                                <div class="progress">
+                                    <div class="progress-bar bg-success progress-bar-striped progress-bar-animated" 
+                                         role="progressbar" 
+                                         style="width: {{estadisticas.porcentaje_participacion}}%"
+                                         aria-valuenow="{{estadisticas.porcentaje_participacion}}" 
+                                         aria-valuemin="0" 
+                                         aria-valuemax="100">
+                                        {{estadisticas.porcentaje_participacion}}%
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="card stats-card bg-light">
-                            <div class="card-body text-center">
-                                <i class="fas fa-vote-yea stats-icon"></i>
-                                <h5>Han Votado</h5>
-                                <h3 class="mb-0">{{estadisticas.votos_registrados}}</h3>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="card stats-card bg-light">
-                            <div class="card-body text-center">
-                                <i class="fas fa-percentage stats-icon"></i>
-                                <h5>Participación</h5>
-                                <h3 class="mb-0">{{estadisticas.porcentaje_participacion}}%</h3>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
-                <!-- Progreso General -->
-                <div class="card stats-card mt-4">
-                    <div class="card-body">
-                        <h5 class="card-title">Progreso de Votación</h5>
-                        <div class="progress">
-                            <div class="progress-bar bg-success progress-bar-striped progress-bar-animated" 
-                                 role="progressbar" 
-                                 style="width: {{estadisticas.porcentaje_participacion}}%"
-                                 aria-valuenow="{{estadisticas.porcentaje_participacion}}" 
-                                 aria-valuemin="0" 
-                                 aria-valuemax="100">
-                                {{estadisticas.porcentaje_participacion}}%
+                        <!-- Tabla de Participación por Grados -->
+                        <div class="card bg-light">
+                            <div class="card-body">
+                                <h5 class="card-title">Participación por Grados</h5>
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Grado</th>
+                                                <th>Total</th>
+                                                <th>Han Votado</th>
+                                                <th>Progreso</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {{#each estadisticas.por_grado}}
+                                            <tr>
+                                                <td>{{grado}}</td>
+                                                <td>{{total}}</td>
+                                                <td>{{votaron}}</td>
+                                                <td>
+                                                    <div class="progress progress-sm">
+                                                        <div class="progress-bar bg-success" 
+                                                             role="progressbar" 
+                                                             style="width: {{porcentaje}}%"
+                                                             aria-valuenow="{{porcentaje}}" 
+                                                             aria-valuemin="0" 
+                                                             aria-valuemax="100">
+                                                            {{porcentaje}}%
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            {{/each}}
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Tabla de Participación por Grados -->
-                <div class="card stats-card mt-4">
-                    <div class="card-body">
-                        <h5 class="card-title">Participación por Grados</h5>
-                        <div class="table-responsive">
-                            <table class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Grado</th>
-                                        <th>Total</th>
-                                        <th>Han Votado</th>
-                                        <th>Progreso</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {{#each estadisticas.por_grado}}
-                                    <tr>
-                                        <td>{{grado}}</td>
-                                        <td>{{total}}</td>
-                                        <td>{{votaron}}</td>
-                                        <td style="width: 40%;">
-                                            <div class="progress">
-                                                <div class="progress-bar bg-success" 
-                                                     role="progressbar" 
-                                                     style="width: {{porcentaje}}%"
-                                                     aria-valuenow="{{porcentaje}}" 
-                                                     aria-valuemin="0" 
-                                                     aria-valuemax="100">
-                                                    {{porcentaje}}%
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    {{/each}}
-                                </tbody>
-                            </table>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- Bootstrap Bundle con Popper -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Bootstrap Bundle con Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Validación del formulario
-    const forms = document.querySelectorAll('.needs-validation');
-    Array.from(forms).forEach(form => {
-        form.addEventListener('submit', event => {
-            if (!form.checkValidity()) {
-                event.preventDefault();
-                event.stopPropagation();
-            }
-            form.classList.add('was-validated');
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Validación del formulario
+        const forms = document.querySelectorAll('.needs-validation');
+        Array.from(forms).forEach(form => {
+            form.addEventListener('submit', event => {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            });
+        });
+
+        // Permitir solo números en el campo de documento
+        const documentoInput = document.getElementById('documento');
+        documentoInput.addEventListener('input', function(e) {
+            this.value = this.value.replace(/[^0-9]/g, '');
         });
     });
-
-    // Permitir solo números en el campo de documento
-    const documentoInput = document.getElementById('documento');
-    documentoInput.addEventListener('input', function(e) {
-        this.value = this.value.replace(/[^0-9]/g, '');
-    });
-});
-</script>
+    </script>
 </body>
 </html> 
