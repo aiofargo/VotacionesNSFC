@@ -5,7 +5,7 @@ const mysql = require('mysql2');
     const connection = mysql.createConnection({
         host: process.env. HOSTDB || 'localhost',
         user: process.env. USERDB || 'root',
-        password: process.env. PASSWORDDB || '',
+        password: process.env. PASSWORDDB || '@ioF4rg0#D3v',
         database: process.env. DB || 'u468593065_elecciones',
         port: process.env. PORTDB || 3306,
     });
